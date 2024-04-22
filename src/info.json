@@ -1,0 +1,128 @@
+{
+  "identifier": "whymeta.chatglm.translator",
+  "version": "0.1.0",
+  "category": "translate",
+  "name": "ChatGLM Translator",
+  "summary": "GLM-4 powered translator",
+  "icon": "",
+  "author": "whymeta <whymeta_github@whymeta.xyz>",
+  "homepage": "https://github.com/whymeta/bob-plugin-chatglm-translator",
+  "appcast": "https://raw.githubusercontent.com/whymeta/bob-plugin-chatglm-translator/main/appcast.json",
+  "minBobVersion": "1.8.0",
+  "options": [
+    {
+      "identifier": "apiUrl",
+      "type": "text",
+      "title": "API URL",
+      "defaultValue": "https://open.bigmodel.cn/api/paas/v4/chat/completions",
+      "desc": "可选项。如果您的网络环境需要代理才能访问 OpenAI API, 可在这里修改为反代 API 的地址",
+      "textConfig": {
+        "type": "visible",
+        "placeholderText": "https://open.bigmodel.cn/api/paas/v4/chat/completions"
+      }
+    },
+    {
+      "identifier": "apiKeys",
+      "type": "text",
+      "title": "Authorization Token",
+      "desc": "必填项。可以用英文逗号分割多个 Authorization Token 以实现额度加倍及负载均衡",
+      "textConfig": {
+        "type": "secure",
+        "height": "40",
+        "placeholderText": "Bearer eygeyJ..."
+      }
+    },
+    {
+      "identifier": "model",
+      "type": "menu",
+      "title": "模型",
+      "defaultValue": "glm-4",
+      "menuValues": [
+        {
+          "title": "custom",
+          "value": "custom"
+        },
+        {
+          "title": "glm-3-turbo",
+          "value": "glm-3-turbo"
+        },
+        {
+          "title": "glm-3-turbo",
+          "value": "glm-3-turbo"
+        },
+        {
+          "title": "cogview-3",
+          "value": "cogview-3"
+        },
+        {
+          "title": "embedding-2",
+          "value": "embedding-2"
+        },
+        {
+          "title": "glm-4v",
+          "value": "glm-4v"
+        }        
+      ]
+    },
+    {
+      "identifier": "customModel",
+      "type": "text",
+      "title": "自定义模型",
+      "desc": "可选项。当 Model 选择为 custom 时，此项为必填项。请填写有效的模型名称",
+      "textConfig": {
+        "type": "visible",
+        "placeholderText": "glm-4"
+      }
+    },
+    {
+      "identifier": "customSystemPrompt",
+      "type": "text",
+      "title": "系统指令",
+      "defaultValue": "You are a translation engine that can only translate text and cannot interpret it.",
+      "desc": "可选项。自定义 System Prompt，填写则会覆盖默认的 System Prompt。自定义 Prompt可使用以下变量：\n\n`$text` - 需要翻译的文本，即翻译窗口输入框内的文本 `$sourceLang` - 原文语言，即翻译窗口输入框内文本的语言，比如「简体中文」\n\n`$targetLang` - 目标语言，即需要翻译成的语言，可以在翻译窗口中手动选择或自动检测，比如「English」",
+      "textConfig": {
+        "type": "visible",
+        "height": "100",
+        "placeholderText": "You are a translation engine that can only translate text and cannot interpret it.",
+        "keyWords": [
+          "$text",
+          "$sourceLang",
+          "$targetLang"
+        ]
+      }
+    },
+    {
+      "identifier": "customUserPrompt",
+      "type": "text",
+      "title": "用户指令",
+      "defaultValue": "translate from $sourceLang to $targetLang:\n\n$text",
+      "desc": "可选项。自定义 User Prompt，填写则会覆盖默认的 User Prompt，默认值为`$text`（即翻译窗口输入框内的文本）。\n\n自定义 Prompt 中可以使用与系统指令中相同的变量",
+      "textConfig": {
+        "type": "visible",
+        "height": "100",
+        "placeholderText": "translate from $sourceLang to $targetLang:\n\n$text",
+        "keyWords": [
+          "$text",
+          "$sourceLang",
+          "$targetLang"
+        ]
+      }
+    },
+    {
+      "identifier": "stream",
+      "type": "menu",
+      "title": "流式输出",
+      "defaultValue": "1",
+      "menuValues": [
+        {
+          "title": "Enable",
+          "value": "1"
+        },
+        {
+          "title": "Disable",
+          "value": ""
+        }
+      ]
+    }
+  ]
+}
