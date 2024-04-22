@@ -2,6 +2,13 @@
   "identifier": "whymeta.chatglm.translator",
   "versions": [
     {
+      "version": "0.2.0",
+      "desc": "change icon",
+      "sha256": "888b29b8327884f35479ad0d35062fabd096e2e73e7f906b01c7e223be611df2",
+      "url": "https://github.com/whymeta/bob-plugin-chatglm-translator/releases/download/v0.2.0/chatglm-translator-0.2.0.bobplugin",
+      "minBobVersion": "1.8.0"
+    },
+    {
       "version": "0.1.0",
       "desc": "add README",
       "sha256": "3dd4a438afade1da503f70b925be18423a0d1a50c3c0cf9f26f5f001fe0f7634",
