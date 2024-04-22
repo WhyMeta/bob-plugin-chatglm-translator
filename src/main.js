@@ -14,11 +14,11 @@ var {
 
 
 /**
- * @param {Bob.TranslateQuery} query
+ * @param {Bob.TranslateQuery} query 查询参数
  * @returns {{ 
  *  generatedSystemPrompt: string, 
  *  generatedUserPrompt: string 
- * }}
+ * }} 返回包含系统提示语和用户提示语的对象
 */
 function generatePrompts(query) {
     let generatedSystemPrompt = SYSTEM_PROMPT;
@@ -60,8 +60,8 @@ function generatePrompts(query) {
 }
 
 /**
- * @param {string} model
- * @param {Bob.TranslateQuery} query
+ * @param {string} model 模型名称
+ * @param {Bob.TranslateQuery} query 查询参数
  * @returns {{ 
  *  model: string;
  *  messages?: {
@@ -69,7 +69,7 @@ function generatePrompts(query) {
  *    content: string;
  *  }[];
  *  prompt?: string;
- * }}
+ * }} 返回构建好的请求体
 */
 function buildRequestBody(model, query) {
     let { customSystemPrompt, customUserPrompt } = $option;
@@ -101,11 +101,11 @@ function buildRequestBody(model, query) {
     };
 }
 
-/**
- * @param {Bob.TranslateQuery} query
- * @param {string} targetText
- * @param {string} textFromResponse
- * @returns {string}
+/** 
+ * @param {Bob.TranslateQuery} query 查询对象
+ * @param {string} targetText 目标文本
+ * @param {string} textFromResponse 响应文本
+ * @returns {string} 返回处理后的文本
 */
 function handleStreamResponse(query, targetText, textFromResponse) {
     if (textFromResponse !== '[DONE]') {
@@ -138,6 +138,9 @@ function handleStreamResponse(query, targetText, textFromResponse) {
  * @param {Bob.TranslateQuery} query
  * @param {Bob.HttpResponse} result
  * @returns {void}
+ * 处理通用响应
+ * @param query 查询对象
+ * @param result 查询结果
 */
 function handleGeneralResponse(query, result) {
     const { choices } = result.data;
@@ -172,6 +175,8 @@ function handleGeneralResponse(query, result) {
 
 /**
  * @type {Bob.Translate}
+ * 翻译函数
+ * @param query 翻译请求对象
  */
 function translate(query) {
     if (!lang.langMap.get(query.detectTo)) {
@@ -212,9 +217,14 @@ function translate(query) {
     const apiKey = getApiKey($option.apiKeys);
 
     const baseUrl = ensureHttpsAndNoTrailingSlash(apiUrl || "https://open.bigmodel.cn");
-    let apiUrlPath = baseUrl.includes("gateway.ai.cloudflare.com") ? "/api/paas/v4/chat/completions" : "/v1/chat/completions";
+    let apiUrlPath;
+    if (baseUrl.includes("open.bigmodel.cn") || baseUrl.includes("gateway.ai.cloudflare.com")) {
+        apiUrlPath = "/api/paas/v4/chat/completions";
+    } else {
+        apiUrlPath = "/v1/chat/completions";
+    }
 
-    const isChatGLMServiceProvider = baseUrl.includes("open.bigmodel.cn");
+    const isChatGLMServiceProvider = baseUrl.includes("open.bigmodel.cn") || baseUrl.includes("gateway.ai.cloudflare.com");
 
     const header = buildHeader(isChatGLMServiceProvider, apiKey);
     const body = buildRequestBody(modelValue, query);
@@ -291,6 +301,11 @@ function translate(query) {
     });
 }
 
+/**
+ * 获取支持的语言列表
+ *
+ * @returns 返回一个包含支持语言名称的数组
+ */
 function supportLanguages() {
     return lang.supportLanguages.map(([standardLang]) => standardLang);
 }
@@ -298,9 +313,11 @@ function supportLanguages() {
 
 /**
  * @type {Bob.PluginValidate}
+ * 插件验证函数
+ * 验证完成后的回调函数
  */
 function pluginValidate(completion) {
-    const { apiKeys, apiUrl, apiVersion, deploymentName } = $option;
+    const { apiKeys, apiUrl } = $option;
     if (!apiKeys) {
         handleValidateError(completion, {
             type: "secretKey",
@@ -314,14 +331,18 @@ function pluginValidate(completion) {
     const apiKey = getApiKey(apiKeys);
 
     const baseUrl = ensureHttpsAndNoTrailingSlash(apiUrl || "https://open.bigmodel.cn");
-    let apiUrlPath = baseUrl.includes("gateway.ai.cloudflare.com") ? "/api/paas/v4/chat/completions" : "/v1/chat/completions";
-
-    const isChatGLMServiceProvider = baseUrl.includes("open.bigmodel.cn");
+    let apiUrlPath;
+    if (baseUrl.includes("open.bigmodel.cn") || baseUrl.includes("gateway.ai.cloudflare.com")) {
+        apiUrlPath = "/api/paas/v4/chat/completions";
+    } else {
+        apiUrlPath = "/v1/chat/completions";
+    }
+    const isChatGLMServiceProvider = baseUrl.includes("open.bigmodel.cn") || baseUrl.includes("gateway.ai.cloudflare.com");
 
     const header = buildHeader(isChatGLMServiceProvider, apiKey);
     const body = {
         "stream": true,
-        "model": "glm",
+        "model": "glm-4",
         "messages": [{
             "content": "You are a helpful assistant.",
             "role": "system",
@@ -338,7 +359,7 @@ function pluginValidate(completion) {
                 header: header,
                 body: body,
                 handler: function (resp) {
-                    $log.info("========: ");
+                    // $log.info("========: ");
                     if (resp.data.error) {
                         const { statusCode } = resp.response;
                         const reason = (statusCode >= 400 && statusCode < 500) ? "param" : "api";

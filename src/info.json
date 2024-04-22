@@ -1,6 +1,6 @@
 {
   "identifier": "whymeta.chatglm.translator",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "category": "translate",
   "name": "ChatGLM Translator",
   "summary": "GLM-4 powered translator",
@@ -15,7 +15,7 @@
       "type": "text",
       "title": "API URL",
       "defaultValue": "https://open.bigmodel.cn/api/paas/v4/chat/completions",
-      "desc": "可选项。如果您的网络环境需要代理才能访问 OpenAI API, 可在这里修改为反代 API 的地址",
+      "desc": "可选项。如果您的网络环境需要代理才能访问 ZhipuAI ChatGLM API, 可在这里修改为反代 API 的地址",
       "textConfig": {
         "type": "visible",
         "placeholderText": "https://open.bigmodel.cn/api/paas/v4/chat/completions"
@@ -47,20 +47,8 @@
           "value": "glm-3-turbo"
         },
         {
-          "title": "glm-3-turbo",
-          "value": "glm-3-turbo"
-        },
-        {
-          "title": "cogview-3",
-          "value": "cogview-3"
-        },
-        {
-          "title": "embedding-2",
-          "value": "embedding-2"
-        },
-        {
-          "title": "glm-4v",
-          "value": "glm-4v"
+          "title": "glm-4",
+          "value": "glm-4"
         }
       ]
     },
@@ -71,7 +59,7 @@
       "desc": "可选项。当 Model 选择为 custom 时，此项为必填项。请填写有效的模型名称",
       "textConfig": {
         "type": "visible",
-        "placeholderText": "glm-4"
+        "placeholderText": "659fb5d6e94483d496d62a9b"
       }
     },
     {

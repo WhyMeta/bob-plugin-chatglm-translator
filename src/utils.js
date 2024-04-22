@@ -5,14 +5,13 @@ var HttpErrorCodes = require("./const.js").HttpErrorCodes;
 * @param {string} apiKey - The authentication API key.
 * @returns {{
   *   "Content-Type": string;
-  *   "api-key"?: string;
   *   "Authorization"?: string;
   * }} The header object.
   */
   function buildHeader(isChatGLMServiceProvider, apiKey) {
     return {
         "Content-Type": "application/json",
-        [isChatGLMServiceProvider ? "api-key" : "Authorization"]: isChatGLMServiceProvider ? apiKey : `Bearer ${apiKey}`
+        "Authorization": isChatGLMServiceProvider ? apiKey : `Bearer ${apiKey}`
     };
   }
 
